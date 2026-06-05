@@ -1,143 +1,127 @@
 # gemma-vision
 
-Local image intelligence CLI powered by [gemma4:12b](https://ollama.com/library/gemma4) via Ollama.
+Local image intelligence CLI powered by [gemma4](https://ollama.com/library/gemma4) via Ollama.
 
-Two subcommands:
-- **`alt`** — generate alt text for images, output as JSON, or patch MDX/HTML files in-place
-- **`outline`** — generate a structured blog post outline from one or more images
+```bash
+gemma-vision alt ./screenshots/          # generate alt text for every image
+gemma-vision outline whiteboard.jpg      # turn a photo into a blog post outline
+```
 
-Everything runs locally. No API keys, no cloud.
+No API keys. No cloud. Runs entirely on your machine.
 
 ## Requirements
 
 - [Ollama](https://ollama.com) running locally
-- `gemma4:12b` pulled: `ollama pull gemma4:12b`
+- A vision model pulled — `ollama pull gemma4:12b` (or `gemma4:e4b` for 8GB RAM)
 
 ## Install
-
-**macOS / Linux — one-liner:**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/main/install.sh | bash
 ```
 
-Installs to `/usr/local/bin/gemma-vision`. Override the install directory:
-
-```bash
-INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/main/install.sh | bash
-```
-
-**Via Go:**
-
-```bash
-go install github.com/Siddhant-K-code/gemma-vision/cmd/gemma-vision@latest
-```
-
-**Manual download:**
-
-Grab the binary for your platform from the [Releases page](https://github.com/Siddhant-K-code/gemma-vision/releases), extract the archive, and move the `gemma-vision` binary to somewhere on your `$PATH`.
-
-**Build from source:**
-
-```bash
-git clone https://github.com/Siddhant-K-code/gemma-vision
-cd gemma-vision
-go build -o gemma-vision ./cmd/gemma-vision/
-```
+Installs to `/usr/local/bin`. See [other install options](#other-install-options) below.
 
 ## Usage
 
 ### `alt` — Generate alt text for images
 
 ```bash
-# Single image
-gemma-vision alt hero.png
-
-# Entire directory
-gemma-vision alt ./screenshots/
-
-# Output as JSON
-gemma-vision alt ./images/ --json
-
-# Write JSON to file
+gemma-vision alt hero.png                        # single image
+gemma-vision alt ./screenshots/                  # entire directory
+gemma-vision alt ./images/ --json                # output as JSON
 gemma-vision alt ./images/ --json --out alts.json
-
-# Patch empty alt="" in MDX/HTML files in-place
-gemma-vision alt ./src/content/ --patch
+gemma-vision alt ./src/content/ --patch          # patch MDX/HTML files in-place
 ```
 
-The `--patch` flag walks MDX, Markdown, HTML, and Svelte files and fills:
+<details>
+<summary>What <code>--patch</code> does</summary>
+
+Walks MDX, Markdown, HTML, and Svelte files and fills in missing alt text:
+
 - `![](image.png)` → `![Generated alt text](image.png)`
 - `<img src="image.png" alt="">` → `<img src="image.png" alt="Generated alt text">`
+
+</details>
 
 ### `outline` — Generate a blog post outline from images
 
 ```bash
-# Single whiteboard photo
-gemma-vision outline whiteboard.jpg
-
-# Multiple slides treated as a sequence
-gemma-vision outline slide1.png slide2.png slide3.png
-
-# Custom audience and tone
-gemma-vision outline diagram.png --audience "startup founders" --tone "direct and opinionated"
-
-# Write outline to a markdown file
-gemma-vision outline whiteboard.jpg --out outline.md
+gemma-vision outline whiteboard.jpg              # single photo
+gemma-vision outline s1.png s2.png s3.png        # slide sequence
+gemma-vision outline diagram.png --out outline.md
+gemma-vision outline diagram.png \
+  --audience "startup founders" \
+  --tone "direct and opinionated"
 ```
 
-Output format:
+<details>
+<summary>Output format</summary>
 
 ```markdown
 ## Title Options
-1. ...
-2. ...
-3. ...
-
 ## Hook
-...
-
 ## Sections
 ### Section Title
 - key point
-- key point
-
 ## Conclusion
-...
-
 ## CTA
-...
-
 ## SEO Keywords
-...
 ```
+
+</details>
 
 ## Flags
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--host` | `http://localhost:11434` | Ollama host (or set `OLLAMA_HOST`) |
-| `--model` | `gemma4:12b` | Model to use (or set `GEMMA_MODEL`) |
+| `--model` | `gemma4:12b` | Ollama model (`GEMMA_MODEL` env var) |
+| `--host` | `http://localhost:11434` | Ollama host (`OLLAMA_HOST` env var) |
 
-### `alt` flags
+<details>
+<summary>All flags</summary>
+
+**`alt`**
 
 | Flag | Description |
 |------|-------------|
-| `--json` | Output results as JSON |
+| `--json` | Output as JSON |
 | `--out <file>` | Write JSON to file |
 | `--patch` | Patch MDX/HTML files in-place |
 
-### `outline` flags
+**`outline`**
 
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--audience` | `software engineers` | Target audience |
 | `--tone` | `technical but conversational` | Writing tone |
-| `--out <file>` | — | Write outline to markdown file |
+| `--out <file>` | — | Write to markdown file |
 
-## Use a different model
+</details>
 
+## Other install options
+
+<details>
+<summary>Via Go / build from source / manual download</summary>
+
+**Via Go:**
 ```bash
-gemma-vision --model gemma4:e4b alt ./images/
-GEMMA_MODEL=gemma4:12b gemma-vision outline diagram.png
+go install github.com/Siddhant-K-code/gemma-vision/cmd/gemma-vision@latest
 ```
+
+**Build from source:**
+```bash
+git clone https://github.com/Siddhant-K-code/gemma-vision
+cd gemma-vision
+go build -o gemma-vision ./cmd/gemma-vision/
+```
+
+**Manual download:**
+Grab the binary for your platform from the [Releases page](https://github.com/Siddhant-K-code/gemma-vision/releases), extract, and move to your `$PATH`.
+
+**Custom install directory:**
+```bash
+INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/main/install.sh | bash
+```
+
+</details>
