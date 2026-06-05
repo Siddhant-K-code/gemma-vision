@@ -8,6 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Set by goreleaser via ldflags at build time.
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 var (
 	ollamaHost  string
 	ollamaModel string
@@ -37,6 +44,7 @@ func init() {
 
 	rootCmd.AddCommand(altCmd)
 	rootCmd.AddCommand(outlineCmd)
+	rootCmd.Version = fmt.Sprintf("%s (commit %s, built %s)", version, commit, date)
 }
 
 func envOr(key, fallback string) string {

@@ -1,0 +1,85 @@
+version: 2
+
+project_name: gemma-vision
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: gemma-vision
+    main: ./cmd/gemma-vision/
+    binary: gemma-vision
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - id: gemma-vision
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- .Arch }}
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - README.md
+      - LICENSE*
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+
+release:
+  github:
+    owner: Siddhant-K-code
+    name: gemma-vision
+  name_template: '{{.Tag}}'
+  draft: false
+  prerelease: auto
+
+# Uncomment and add HOMEBREW_TAP_TOKEN secret to enable Homebrew tap publishing.
+# Requires a Siddhant-K-code/homebrew-tap repo to exist.
+#
+# brews:
+#   - name: gemma-vision
+#     repository:
+#       owner: Siddhant-K-code
+#       name: homebrew-tap
+#       token: '{{ .Env.HOMEBREW_TAP_TOKEN }}'
+#     commit_author:
+#       name: Siddhant Khare
+#       email: siddhantkhare2694@gmail.com
+#     homepage: https://github.com/Siddhant-K-code/gemma-vision
+#     description: Local image intelligence CLI — alt text and blog outlines via gemma4:12b and Ollama
+#     license: MIT
+#     install: |
+#       bin.install "gemma-vision"
+#     test: |
+#       system "#{bin}/gemma-vision", "--help"
