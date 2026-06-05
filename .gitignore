@@ -1,4 +1,5 @@
-gemma-vision
+# compiled binary
+/gemma-vision
 *.exe
 *.test
 *.out
