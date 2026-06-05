@@ -139,5 +139,5 @@ Output format:
 
 ```bash
 gemma-vision --model gemma4:e4b alt ./images/
-GEMMA_MODEL=llava:13b gemma-vision outline diagram.png
+GEMMA_MODEL=gemma4:12b gemma-vision outline diagram.png
 ```
