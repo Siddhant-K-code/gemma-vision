@@ -15,29 +15,27 @@ Everything runs locally. No API keys, no cloud.
 
 ## Install
 
-**macOS / Linux — download binary directly:**
+**macOS / Linux — one-liner:**
 
 ```bash
-# macOS Apple Silicon
-curl -L https://github.com/Siddhant-K-code/gemma-vision/releases/latest/download/gemma-vision_$(curl -s https://api.github.com/repos/Siddhant-K-code/gemma-vision/releases/latest | grep tag_name | cut -d'"' -f4 | tr -d v)_darwin_arm64.tar.gz | tar xz
-sudo mv gemma-vision /usr/local/bin/
-
-# macOS Intel
-curl -L https://github.com/Siddhant-K-code/gemma-vision/releases/latest/download/gemma-vision_$(curl -s https://api.github.com/repos/Siddhant-K-code/gemma-vision/releases/latest | grep tag_name | cut -d'"' -f4 | tr -d v)_darwin_amd64.tar.gz | tar xz
-sudo mv gemma-vision /usr/local/bin/
-
-# Linux amd64
-curl -L https://github.com/Siddhant-K-code/gemma-vision/releases/latest/download/gemma-vision_$(curl -s https://api.github.com/repos/Siddhant-K-code/gemma-vision/releases/latest | grep tag_name | cut -d'"' -f4 | tr -d v)_linux_amd64.tar.gz | tar xz
-sudo mv gemma-vision /usr/local/bin/
+curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/master/install.sh | bash
 ```
 
-Or download manually from the [Releases page](https://github.com/Siddhant-K-code/gemma-vision/releases).
+Installs to `/usr/local/bin/gemma-vision`. Override the install directory:
+
+```bash
+INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/master/install.sh | bash
+```
 
 **Via Go:**
 
 ```bash
 go install github.com/Siddhant-K-code/gemma-vision/cmd/gemma-vision@latest
 ```
+
+**Manual download:**
+
+Grab the binary for your platform from the [Releases page](https://github.com/Siddhant-K-code/gemma-vision/releases), extract the archive, and move the `gemma-vision` binary to somewhere on your `$PATH`.
 
 **Build from source:**
 
