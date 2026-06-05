@@ -55,6 +55,7 @@ changelog:
       - '^chore:'
       - Merge pull request
       - Merge branch
+      - Co-authored-by
 
 release:
   github:

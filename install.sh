@@ -2,6 +2,7 @@
 set -euo pipefail
 
 REPO="Siddhant-K-code/gemma-vision"
+BRANCH="main"
 BINARY="gemma-vision"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 

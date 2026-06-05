@@ -18,13 +18,13 @@ Everything runs locally. No API keys, no cloud.
 **macOS / Linux — one-liner:**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/master/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/main/install.sh | bash
 ```
 
 Installs to `/usr/local/bin/gemma-vision`. Override the install directory:
 
 ```bash
-INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/master/install.sh | bash
+INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/Siddhant-K-code/gemma-vision/main/install.sh | bash
 ```
 
 **Via Go:**
