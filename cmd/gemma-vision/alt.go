@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/schollz/progressbar/v3"
@@ -104,18 +105,49 @@ func runAlt(cmd *cobra.Command, args []string) error {
 	results := make(map[string]string, len(images))
 
 	for _, img := range images {
-		_ = bar.Add(1)
+		// Spinner while model is thinking
+		spinner := progressbar.NewOptions(-1,
+			progressbar.OptionSetDescription(fmt.Sprintf("  Analysing %s", filepath.Base(img))),
+			progressbar.OptionSetTheme(progressbar.Theme{
+				Saucer: "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏", SaucerPadding: " ", BarStart: "", BarEnd: "",
+			}),
+			progressbar.OptionSpinnerType(14),
+			progressbar.OptionSetWriter(os.Stderr),
+		)
+
+		done := make(chan struct{})
+		go func() {
+			for {
+				select {
+				case <-done:
+					return
+				default:
+					_ = spinner.Add(1)
+					time.Sleep(80 * time.Millisecond)
+				}
+			}
+		}()
+
+		start := time.Now()
 		alt, err := client.Ask(altPrompt, []string{img})
+		close(done)
+		_ = spinner.Clear()
+
+		elapsed := time.Since(start).Round(time.Millisecond)
+
 		if err != nil {
-			red.Fprintf(os.Stderr, "\n✗ %s: %v\n", img, err)
+			red.Fprintf(os.Stderr, "✗ %s: %v\n", filepath.Base(img), err)
+			_ = bar.Add(1)
 			continue
 		}
 		alt = strings.TrimSpace(alt)
 		results[img] = alt
+		_ = bar.Add(1)
 
 		if !altOutputJSON && !altPatchMDX {
 			bold.Printf("\n%s\n", img)
 			green.Printf("  %s\n", alt)
+			color.New(color.Faint).Fprintf(os.Stderr, "  (%s)\n", elapsed)
 		}
 	}
 
