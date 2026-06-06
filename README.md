@@ -9,6 +9,9 @@ gemma-vision outline whiteboard.jpg      # turn a photo into a blog post outline
 
 No API keys. No cloud. Runs entirely on your machine.
 
+![Video demo](/gemma-vision-video-demo.mp4)
+
+
 ## Requirements
 
 - [Ollama](https://ollama.com) running locally
